@@ -10,6 +10,7 @@ public static class DirectorBlockers
     private static void Init()
     {
         IL.RoR2.DccsPool.AreConditionsMet += DccsPool_AreConditionsMet;
+        IL.RoR2.DCCSBlender.AreConditionsMet += DCCSBlender_AreConditionsMet;
         IL.RoR2.DirectorCard.IsAvailable += DirectorCard_IsAvailable;
     }
 
@@ -41,6 +42,42 @@ public static class DirectorBlockers
             });
         }
         else ExpansionManagerPlugin.Logger.LogError($"{nameof(DirectorBlockers)}: {nameof(DccsPool_AreConditionsMet)} IL match failed");
+    }
+
+    private static void DCCSBlender_AreConditionsMet(ILContext il)
+    {
+        ILCursor c = new ILCursor(il);
+        int locExpansionIndex = -1;
+        if (c.TryGotoNext(MoveType.After,
+            x => x.MatchLdloc(out locExpansionIndex),
+            x => x.MatchCallOrCallvirt<Run>(nameof(Run.IsExpansionEnabled)))
+            )
+        {
+            c.Emit(OpCodes.Ldarg_0);
+            c.Emit(OpCodes.Ldloc, locExpansionIndex);
+            c.EmitDelegate<Func<bool, DccsPool.PoolEntry, ExpansionDef, bool>>((result, poolEntry, requiredExpansion) =>
+            {
+                if (result)
+                {
+                    foreach (DirectorCardCategorySelection.Category category in poolEntry.dccs.categories)
+                    {
+                        foreach (DirectorCard directorCard in category.cards)
+                        {
+                            switch (directorCard.spawnCard)
+                            {
+                                case CharacterSpawnCard:
+                                    return !Run.instance.AreExpansionMonstersDisabled(requiredExpansion);
+
+                                case InteractableSpawnCard:
+                                    return !Run.instance.AreExpansionInteractablesDisabled(requiredExpansion);
+                            }
+                        }
+                    }
+                }
+                return result;
+            });
+        }
+        else ExpansionManagerPlugin.Logger.LogError($"{nameof(DirectorBlockers)}: {nameof(DCCSBlender_AreConditionsMet)} IL match failed");
     }
 
     private static void DirectorCard_IsAvailable(ILContext il)
