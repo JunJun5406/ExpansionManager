@@ -22,16 +22,23 @@ public static class DeadDccsAdditions
     {
         { "dccsAncientLoftMonstersDLC1", AncientLoftMonstersDLC1 },
         { "dccsSulfurPoolsMonstersDLC1", SulfurPoolsMonstersDLC1 },
-        { "dccsHelminthRoostMonstersDLC2Only", HelminthRoostMonstersDLC2Only },
+        { "dccsIronalluviumMonsters", IronAlluviumMonsters },
+        { "dccsIronalluvium2MonstersDLC2", Ironalluvium2MonstersDLC2 },
+        { "dccsRepurposedcraterMonstersDLC1", RepurposedCraterMonstersDLC1 },
+        { "dccsConduitcanyonMonsters", ConduitCanyonMonsters },
     };
 
     public static AsyncOperationHandle<SpawnCard>
         cscBell = Addressables.LoadAssetAsync<SpawnCard>("RoR2/Base/Bell/cscBell.asset"),
         cscLesserWisp = Addressables.LoadAssetAsync<SpawnCard>("RoR2/Base/Wisp/cscLesserWisp.asset"),
         cscMagmaWorm = Addressables.LoadAssetAsync<SpawnCard>("RoR2/Base/MagmaWorm/cscMagmaWorm.asset"),
-        cscScorchling = Addressables.LoadAssetAsync<SpawnCard>("RoR2/DLC2/Scorchling/cscScorchling.asset"),
         cscHermitCrab = Addressables.LoadAssetAsync<SpawnCard>("RoR2/Base/HermitCrab/cscHermitCrab.asset"),
         cscLemurian = Addressables.LoadAssetAsync<SpawnCard>("RoR2/Base/Lemurian/cscLemurian.asset"),
+        cscVulture = Addressables.LoadAssetAsync<SpawnCard>("RoR2/Base/Vulture/cscVulture.asset"),
+        cscRoboBallMini = Addressables.LoadAssetAsync<SpawnCard>("RoR2/Base/RoboBallBoss/cscRoboBallMini.asset"),
+        cscChild = Addressables.LoadAssetAsync<SpawnCard>("RoR2/DLC2/Child/cscChild.asset"),
+        cscMinorConstruct = Addressables.LoadAssetAsync<SpawnCard>("RoR2/DLC1/MajorAndMinorConstruct/cscMinorConstruct.asset"),
+        cscMiniMushroom = Addressables.LoadAssetAsync<SpawnCard>("RoR2/Base/MiniMushroom/cscMiniMushroom.asset"),
         cscImp = Addressables.LoadAssetAsync<SpawnCard>("RoR2/Base/Imp/cscImp.asset");
 
     public static void AncientLoftMonstersDLC1(DirectorCardCategorySelection dccs)
@@ -58,30 +65,65 @@ public static class DeadDccsAdditions
         });
         dccs.AttemptAddCard(BASIC_MONSTERS, new DirectorCard
         {
-            spawnCard = cscScorchling.WaitForCompletion(),
-            selectionWeight = 1,
-            spawnDistance = DirectorCore.MonsterSpawnDistance.Far,
-        });
-        dccs.AttemptAddCard(BASIC_MONSTERS, new DirectorCard
-        {
             spawnCard = cscHermitCrab.WaitForCompletion(),
             selectionWeight = 1,
             spawnDistance = DirectorCore.MonsterSpawnDistance.Far,
-            preventOverhead = true,
         });
         dccs.AttemptAddCard(BASIC_MONSTERS, new DirectorCard
         {
             spawnCard = cscLemurian.WaitForCompletion(),
-            selectionWeight = 2,
+            selectionWeight = 1,
         });
+        dccs.SetCategoryWeight(BASIC_MONSTERS, 2);
     }
 
-    public static void HelminthRoostMonstersDLC2Only(DirectorCardCategorySelection dccs)
+    public static void IronAlluviumMonsters(DirectorCardCategorySelection dccs)
     {
         dccs.AttemptAddCard(BASIC_MONSTERS, new DirectorCard
         {
+            spawnCard = cscRoboBallMini.WaitForCompletion(),
+            selectionWeight = 1,
+            spawnDistance = DirectorCore.MonsterSpawnDistance.Far,
+        });
+        dccs.AttemptAddCard(BASIC_MONSTERS, new DirectorCard
+        {
+            spawnCard = cscVulture.WaitForCompletion(),
+            selectionWeight = 1,
+        });
+        dccs.SetCategoryWeight(BASIC_MONSTERS, 2);
+    }
+
+    public static void Ironalluvium2MonstersDLC2(DirectorCardCategorySelection dccs)
+    {
+        dccs.AttemptAddCard(BASIC_MONSTERS, new DirectorCard
+        {
+            spawnCard = cscChild.WaitForCompletion(),
+            selectionWeight = 1,
+        });
+        dccs.SetCategoryWeight(BASIC_MONSTERS, 2);
+    }
+
+    public static void RepurposedCraterMonstersDLC1(DirectorCardCategorySelection dccs)
+    {
+        dccs.AttemptAddCard(BASIC_MONSTERS, new DirectorCard
+        {
+            spawnCard = cscMinorConstruct.WaitForCompletion(),
+            selectionWeight = 4,
+            preventOverhead = true,
+        });
+    }
+
+    public static void ConduitCanyonMonsters(DirectorCardCategorySelection dccs)
+    {
+        dccs.AttemptAddCard(BASIC_MONSTERS, new DirectorCard
+        {
+            spawnCard = cscMiniMushroom.WaitForCompletion(),
+            selectionWeight = 10,
+        });
+        dccs.AttemptAddCard(BASIC_MONSTERS, new DirectorCard
+        {
             spawnCard = cscImp.WaitForCompletion(),
-            selectionWeight = 2,
+            selectionWeight = 10,
         });
     }
 
@@ -94,6 +136,15 @@ public static class DeadDccsAdditions
             return true;
         }
         return false;
+    }
+
+    public static void SetCategoryWeight(this DirectorCardCategorySelection dccs, string categoryName, int categoryWeight)
+    {
+        int categoryIndex = dccs.FindCategoryIndexByName(categoryName);
+        if (ArrayUtils.IsInBounds(dccs.categories, categoryIndex))
+        {
+            dccs.categories[categoryIndex].selectionWeight = categoryWeight;
+        }
     }
 
     [SystemInitializer]
