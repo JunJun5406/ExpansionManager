@@ -1,11 +1,11 @@
 {
     "name": "ExpansionManager",
-    "author": "Groove_Salad",
+    "author": "006",
     "version_number": "1.0.2",
-    "website_url": "https://github.com/Priscillalala/ExpansionManager",
+    "website_url": "https://github.com/6thmoon/ExpansionManager",
     "description": "Finer control over Expansions. Vote on different types of content individually.",
     "dependencies": [
-        "bbepis-BepInExPack-5.4.2117",
-        "RiskofThunder-HookGenPatcher-1.2.5"
+        "bbepis-BepInExPack-5.4.2100",
+        "RiskofThunder-HookGenPatcher-1.2.9"
     ]
 }

@@ -9,8 +9,6 @@ public static class DropTableFallbacks
         { "dtVoidChest", "dtChest1" },
         { "dtShrineHalcyoniteTier1", "dtShrineHalcyoniteTier3" }, // Tiers 1 and 2 are only halcyonite items, Tier 3 is no halcyonite items
         { "dtShrineHalcyoniteTier2", "dtShrineHalcyoniteTier3" },
-        { "PrismDroptable", "dtCategoryChest2Damage" }, // Rulers of the Red Plane drop table that is unused as of 0.1.5
-        { string.Empty, "dtChest1" }, // Rulers of the Red Plane bloody prism drop table as of 0.1.5
     };
 
     public static bool DropTableFallback(PickupDropTable dropTable, out PickupDropTable fallbackDropTable)
