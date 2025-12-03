@@ -8,6 +8,7 @@ public static class HalcyoniteOverrideFallback
     private static void Init()
     {
         On.RoR2.CombatDirector.OverrideCurrentMonsterCard += CombatDirector_OverrideCurrentMonsterCard;
+        On.RoR2.SolusFight.OverrideBossFight += SolusFight_OverrideBossFight;
     }
 
     private static void CombatDirector_OverrideCurrentMonsterCard(On.RoR2.CombatDirector.orig_OverrideCurrentMonsterCard orig, CombatDirector self, DirectorCard overrideMonsterCard)
@@ -30,5 +31,15 @@ public static class HalcyoniteOverrideFallback
             }
         }
         orig(self, overrideMonsterCard);
+    }
+
+    private static void SolusFight_OverrideBossFight(On.RoR2.SolusFight.orig_OverrideBossFight orig, SolusFight self)
+    {
+        orig(self);
+        CombatDirector_OverrideCurrentMonsterCard((combatDirector, overrideMonsterCard) =>
+        {
+            combatDirector.OverrideNextBossCard(overrideMonsterCard, false);
+        },
+        TeleporterInteraction.instance.companionBoss, self.ForcedBossFight);
     }
 }
