@@ -2,7 +2,7 @@
 
 // Combat director overrides will 'fallback' to normal spawns anyway if the selected monster is unavailable
 // but we choose a more suitable replacement for the shrine-spawned Halcyonite monster and others
-public static class HalcyoniteOverrideFallback
+public static class AlternatePathEncounter
 {
     [SystemInitializer]
     private static void Init()

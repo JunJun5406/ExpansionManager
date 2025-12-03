@@ -1,7 +1,7 @@
 {
     "name": "ExpansionManager",
     "author": "006",
-    "version_number": "1.0.2",
+    "version_number": "1.1.0",
     "website_url": "https://github.com/6thmoon/ExpansionManager",
     "description": "Finer control over Expansions. Vote on different types of content individually.",
     "dependencies": [
