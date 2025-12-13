@@ -13,6 +13,7 @@ public static class ItemBlockers
         CharacterBody.onBodyAwakeGlobal += CharacterBody_onBodyAwakeGlobal;
         On.RoR2.ExplicitPickupDropTable.GenerateWeightedSelection += ExplicitPickupDropTable_GenerateWeightedSelection;
         IL.RoR2.PreGameController.RecalculateModifierAvailability += PreGameController_RecalculateModifierAvailability;
+        On.RoR2.CraftableCatalog.FilterByEntitlement += CraftableCatalog_FilterByEntitlement;
     }
 
     private static void CharacterBody_onBodyAwakeGlobal(CharacterBody body)
@@ -98,5 +99,20 @@ public static class ItemBlockers
             });
         }
         else ExpansionManagerPlugin.Logger.LogError($"{nameof(ItemBlockers)}: {nameof(PreGameController_RecalculateModifierAvailability)} IL match failed");
+    }
+
+    private static void CraftableCatalog_FilterByEntitlement(On.RoR2.CraftableCatalog.orig_FilterByEntitlement orig, ref CraftableCatalog.RecipeEntry[] source)
+    {
+        orig(ref source);
+        var list = new List<CraftableCatalog.RecipeEntry>();
+        foreach (CraftableCatalog.RecipeEntry entry in source)
+        {
+            PickupDef pickup = PickupCatalog.GetPickupDef(entry.result);
+            if (Run.instance.IsPickupAvailable(entry.result) || pickup.itemIndex == DLC3Content.Items.MasterCore.itemIndex || pickup.equipmentIndex == DLC3Content.Equipment.EliteCollectiveEquipment.equipmentIndex)
+            {
+                list.Add(entry);
+            }
+        }
+        source = list.ToArray();
     }
 }

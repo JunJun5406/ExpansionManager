@@ -12,11 +12,11 @@ Click on any Expansion in the lobby to open a sub-menu that controls:
 <kbd><img src="https://github.com/6thmoon/ExpansionManager/blob/master/media/rulevoting.gif?raw=true" alt="Rule voting example"></kbd>
 
 ## Contact
-~~You can'*t* find me in the [RoR2 Modding Server](https://discord.gg/5MbXZvd) @groove_salad~~; feel free to @me instead, I'll only be mildly annoyed.
+~~You can'*t* find me in the [RoR2 Modding Server](https://discord.gg/5MbXZvd) @groove_salad~~; feel free to @[me](https://thunderstore.io/package/6thmoon?deprecated=on) instead, I'll only be mildly annoyed.
 
 Or, you can post issues and feedback on the [GitHub](https://github.com/6thmoon/ExpansionManager/issues).
 
 ## Donations
-If you like ~~my~~ Groove's mods, you can Buy ~~Me~~ Them a ~~Coffee~~ Salad! You can also find my link at top of the [Thunderstore](https://thunderstore.io/package/006/ExpansionManager) page.
+If you like ~~my~~ Groove's [mods](https://thunderstore.io/package/Groove_Salad?deprecated=on), you can Buy ~~Me~~ Them a ~~Coffee~~ Salad! You can also find my link at top of the [Thunderstore](https://thunderstore.io/package/006/ExpansionManager) page.
 
 <a href="https://www.buymeacoffee.com/groovesalad" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height=40 width=145></a>
