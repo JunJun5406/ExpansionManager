@@ -11,22 +11,49 @@ public static class ShapingShrineExpansionRequirement
     [SystemInitializer]
     private static IEnumerator Init()
     {
-        var load_ShrineColossusAccess = Addressables.LoadAssetAsync<GameObject>("RoR2/DLC2/ShrineColossusAccess.prefab");
-        var load_DLC2 = Addressables.LoadAssetAsync<ExpansionDef>("RoR2/DLC2/Common/DLC2.asset");
-        while (!load_ShrineColossusAccess.IsDone)
+        var expansion = Addressables.LoadAssetAsync<ExpansionDef>("RoR2/DLC2/Common/DLC2.asset");
+        var prefab = Addressables.LoadAssetAsync<GameObject>("RoR2/DLC2/ShrineColossusAccess.prefab");
+        while (!expansion.IsDone)
         {
             yield return null;
         }
-        GameObject ShrineColossusAccess = load_ShrineColossusAccess.Result;
-        if (!ShrineColossusAccess || ShrineColossusAccess.GetComponent<ExpansionRequirementComponent>())
+        yield return add();
+        IEnumerator add()
         {
-            yield break;
+            while (!prefab.IsDone)
+            {
+                yield return null;
+            }
+            GameObject result = prefab.Result;
+            if (!result || result.GetComponent<ExpansionRequirementComponent>())
+            {
+                yield break;
+            }
+            result.AddComponent<ExpansionRequirementComponent>().requiredExpansion = expansion.Result;
         }
-        ExpansionRequirementComponent expansionRequirement = ShrineColossusAccess.AddComponent<ExpansionRequirementComponent>();
-        while (!load_DLC2.IsDone)
+        expansion = Addressables.LoadAssetAsync<ExpansionDef>("RoR2/DLC3/DLC3.asset");
+        var requests = from key in new string[]
+        {
+            "RoR2/DLC3/DroneCombinerStation/DroneCombinerStation.prefab",
+            "RoR2/DLC3/Drones/BombardmentDroneBroken.prefab",
+            "RoR2/DLC3/Drones/CleanupDroneBroken.prefab",
+            "RoR2/DLC3/Drones/CopycatDroneBroken.prefab",
+            "RoR2/DLC3/Drones/HaulerDroneBroken.prefab",
+            "RoR2/DLC3/Drones/JailerDroneBroken.prefab",
+            "RoR2/DLC3/Drones/JunkDroneBroken.prefab",
+            "RoR2/DLC3/Drones/RechargeDroneBroken.prefab",
+            "RoR2/DLC3/DroneScrapper/DroneScrapper.prefab",
+            "RoR2/DLC3/TemporaryItemsDistributor/TemporaryItemsShopTerminal.prefab",
+            "RoR2/DLC3/TripleDroneShop/TripleDroneShop.prefab"
+        } select Addressables.LoadAssetAsync<GameObject>(key);
+        while (!expansion.IsDone)
         {
             yield return null;
         }
-        expansionRequirement.requiredExpansion = load_DLC2.Result;
+        foreach (var handle in requests)
+        {
+            prefab = handle;
+            yield return add();
+        }
     }
 }
