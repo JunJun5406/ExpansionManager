@@ -1,3 +1,6 @@
+## `1.1.2`
+- Interactables properly check for DLC requirement even on expansion-locked stages
+
 ## `1.1.1`
 - Disabled items and associated recipe options no longer appear in crafting menu
 

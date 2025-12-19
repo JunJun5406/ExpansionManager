@@ -4,9 +4,8 @@ using UnityEngine.AddressableAssets;
 
 namespace ExpansionManager.Fixes;
 
-// The Shrine of Shaping has no expansion requirement
-// This is presumably an oversight so we give it one
-public static class ShapingShrineExpansionRequirement
+// Originally, only Shrine of Shaping was affected; currently applies to all DLC3 interactables
+public static class MissingExpansionRequirement
 {
     [SystemInitializer]
     private static IEnumerator Init()
@@ -35,13 +34,6 @@ public static class ShapingShrineExpansionRequirement
         var requests = from key in new string[]
         {
             "RoR2/DLC3/DroneCombinerStation/DroneCombinerStation.prefab",
-            "RoR2/DLC3/Drones/BombardmentDroneBroken.prefab",
-            "RoR2/DLC3/Drones/CleanupDroneBroken.prefab",
-            "RoR2/DLC3/Drones/CopycatDroneBroken.prefab",
-            "RoR2/DLC3/Drones/HaulerDroneBroken.prefab",
-            "RoR2/DLC3/Drones/JailerDroneBroken.prefab",
-            "RoR2/DLC3/Drones/JunkDroneBroken.prefab",
-            "RoR2/DLC3/Drones/RechargeDroneBroken.prefab",
             "RoR2/DLC3/DroneScrapper/DroneScrapper.prefab",
             "RoR2/DLC3/TemporaryItemsDistributor/TemporaryItemsShopTerminal.prefab",
             "RoR2/DLC3/TripleDroneShop/TripleDroneShop.prefab"
@@ -55,5 +47,17 @@ public static class ShapingShrineExpansionRequirement
             prefab = handle;
             yield return add();
         }
+        Stage.onServerStageBegin += instance =>
+        {
+            SceneDef scene = instance.sceneDef;
+            if (scene && Run.instance.AreExpansionInteractablesDisabled(expansion.Result) && scene.cachedName is "computationalexchange")
+            {
+                GameObject obj = GameObject.Find("/HOLDER: Interactables/GROUP: Drone Zone/DroneCombinerStation");
+                if (obj)
+                {
+                    obj.SetActive(false);
+                }
+            }
+        };
     }
 }
